@@ -64,6 +64,34 @@ router.post('/v1/add', [authenticator, roleGuard(['ADMIN'])], function (req, res
     });
 });
 
+router.post('/v1/edit', [authenticator, roleGuard(['ADMIN'])], function (req, res, next) {
+    let data = req.body;
+    data.req = req.data;
+    users.editUserDetails(data, function (err, response) {
+        let status = 0;
+        if (err) {
+            status = err.status;
+            return res.status(status).send(err)
+        }
+        status = response.status;
+        return res.status(status).send(response);
+    });
+});
+
+router.get('/v1/details', [authenticator, roleGuard(['ADMIN'])], function (req, res, next) {
+    let data = req.query;
+    data.req = req.data;
+    users.getUserDetails(data, function (err, response) {
+        let status = 0;
+        if (err) {
+            status = err.status;
+            return res.status(status).send(err)
+        }
+        status = response.status;
+        return res.status(status).send(response);
+    });
+});
+
 
 
 

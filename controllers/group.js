@@ -41,8 +41,16 @@ const getUserGroups = async function (data, response, cb) {
     }
     let projection = {}
     let options = {}
-
-    Group.find(findData, projection, options)
+    let populate = [{
+        path: 'admins',
+        model: 'user',
+        select: 'name email userName'
+    }, {
+        path: 'members',
+        model: 'user',
+        select: 'name email userName'
+    }]
+    Group.find(findData, projection, options).populate(populate)
         .then(res => {
             console.log(res)
             return cb(null, sendResponse(200, "List Fetched", "getUserGroups", res, null))
@@ -69,6 +77,32 @@ const addNewGroup = function (data, response, cb) {
 
 };
 exports.addNewGroup = addNewGroup
+
+
+const addNewGroupMembers = function (data, response, cb) {
+    if (!cb) {
+        cb = response;
+    }
+    if (!data.members) {
+        return cb(sendResponse(400, null, 'addNewGroupMembers', null, null));
+    }
+
+    let findData = {
+        _id: data.groupId
+    }
+    let insertData = {
+        $set: { members: data.members },
+    }
+    Group.updateOne(findData, insertData)
+        .then(res => {
+            return cb(null, sendResponse(200, 'Group Members Added', 'addNewGroupMembers', null, null))
+        })
+        .catch(err => {
+            console.log("ERROR in addNewGroupMembers", err);
+            return cb(sendResponse(500, null, "addNewGroupMembers", null, null));
+        })
+}
+exports.addNewGroupMembers = addNewGroupMembers
 
 
 const insertNewGroup = function (data, response, cb) {

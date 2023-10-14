@@ -12,7 +12,9 @@ const getGroupChats = async function (data, response, cb) {
         groupId: data.groupId
     }
     let projection = {}
-    let options = {}
+    let options = {
+        // limit: 50
+    }
 
     let populate = [
         {
