@@ -11,7 +11,11 @@ const getUserList = async function (data, response, cb) {
     let findData = {
         isDelete: false
     }
-    let projection = {}
+    let projection = {
+        name: 1,
+        email: 1,
+        userName: 1,
+    }
     let options = {}
 
     User.find(findData, projection, options)

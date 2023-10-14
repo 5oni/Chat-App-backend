@@ -26,10 +26,12 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-const auth = require('./routes/auth');
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const groupRoutes = require('./routes/group');
 
-// app.use('/auth', auth);
+app.use('/auth', authRoutes);
+app.use('/group', groupRoutes);
 app.use('/user', userRoutes);
 
 // catch 404 and forward to error handler
