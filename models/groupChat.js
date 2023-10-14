@@ -7,12 +7,12 @@ let Schema = mongoose.Schema;
 let groupChatSchema = new Schema({
     message: String,
     sender: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-    groupId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'group' }],
+    groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'group' },
 
     reactions: [
         {
             emoji: String,
-            user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+            userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
         },
     ],
 

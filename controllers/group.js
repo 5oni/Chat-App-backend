@@ -93,3 +93,33 @@ const insertNewGroup = function (data, response, cb) {
             return cb(sendResponse(500, null, "insertNewGroup", null, null));
         })
 }
+
+const getGroupDetails = async function (data, response, cb) {
+    if (!cb) {
+        cb = response;
+    }
+    console.log(data)
+    let userId = data.req?.auth?.id
+    let findData = {
+        isDelete: false,
+        _id: data.groupId,
+        $or: [
+            { admins: { $in: [userId] } },
+            { members: { $in: [userId] } },//TODO
+            { createdBy: userId },
+        ]
+    }
+    let projection = {}
+    let options = {}
+    console.log(findData)
+    Group.findOne(findData, projection, options)
+        .then(res => {
+            console.log(res)
+            return cb(null, sendResponse(200, "Group details Fetched", "getGroupDetails", res, null))
+        })
+        .catch(err => {
+            console.log("ERROR in getGroupDetails", err);
+            return cb(sendResponse(500, null, "getGroupDetails", null, null));
+        })
+};
+exports.getGroupDetails = getGroupDetails;

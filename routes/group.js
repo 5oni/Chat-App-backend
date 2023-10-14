@@ -5,9 +5,10 @@ const router = express.Router();
 /* Controllers */
 const group = require('../controllers/group');
 const authenticator = require('../middlewares/authenticator')();
+const roleGuard = require('../middlewares/roleGuard')
 
 
-router.get('/v1/admin/list', [authenticator], function (req, res, next) {
+router.get('/v1/admin/list', [authenticator, roleGuard(['ADMIN'])], function (req, res, next) {
     let data = req.query;
     data.req = req.data;
     group.getAllGroups(data, function (err, response) {

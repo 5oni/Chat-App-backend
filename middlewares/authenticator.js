@@ -4,7 +4,6 @@ module.exports = function () {
     return function (req, res, next) {
         try {
 
-            console.log(req.headers)
             if (!req.headers) {
                 console.log("Invalid Request");
                 let response = {
@@ -29,7 +28,7 @@ module.exports = function () {
                         console.log('Error in validateToken : ', err);
                         return res.status(401).send({ success: false, message: 'Failed to authenticate token at Lv2' });
                     }
-                    console.log(response)
+                    console.log("Response", response)
                     // if everything is good, save to request for use in other routes
                     req.data.auth = response;
                     req.data.auth.token = token;

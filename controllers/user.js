@@ -18,7 +18,7 @@ const getUserList = async function (data, response, cb) {
     }
     let options = {}
 
-    User.find(findData, projection, options)
+    User.find(findData, projection, options).sort({ createdAt: -1 })
         .then(res => {
             console.log(res)
             return cb(null, sendResponse(200, "List Fetched", "getUserList", res, null))

@@ -3,15 +3,15 @@ const router = express.Router();
 
 
 /* Controllers */
-const users = require('../controllers/user');
+const groupChat = require('../controllers/groupChat');
 const authenticator = require('../middlewares/authenticator')();
-const roleGuard = require('../middlewares/roleGuard');
+const chatGuard = require('../middlewares/chatGuard')();
 
 
-router.get('/v1/list', function (req, res, next) {
+router.get('/v1/list', [authenticator, chatGuard], function (req, res, next) {
     let data = req.query;
     data.req = req.data;
-    users.getUserList(data, function (err, response) {
+    groupChat.getGroupChats(data, function (err, response) {
         let status = 0;
         if (err) {
             status = err.status;
@@ -22,38 +22,24 @@ router.get('/v1/list', function (req, res, next) {
     });
 });
 
-router.get('/v1/email/exists', [authenticator, roleGuard(['ADMIN'])], function (req, res, next) {
-    let data = req.query;
-    data.req = req.data;
-    users.validateUserEmail(data, function (err, response) {
-        let status = 0;
-        if (err) {
-            status = err.status;
-            return res.status(status).send(err)
-        }
-        status = response.status;
-        return res.status(status).send(response);
-    });
-});
 
-router.get('/v1/username/exists', [authenticator, roleGuard(['ADMIN'])], function (req, res, next) {
-    let data = req.query;
-    data.req = req.data;
-    users.validateUserName(data, function (err, response) {
-        let status = 0;
-        if (err) {
-            status = err.status;
-            return res.status(status).send(err)
-        }
-        status = response.status;
-        return res.status(status).send(response);
-    });
-});
-
-router.post('/v1/add', [authenticator, roleGuard(['ADMIN'])], function (req, res, next) {
+router.post('/v1/add', [authenticator, chatGuard], function (req, res, next) {
     let data = req.body;
     data.req = req.data;
-    users.addNewUser(data, function (err, response) {
+    groupChat.addNewGroupChat(data, function (err, response) {
+        let status = 0;
+        if (err) {
+            status = err.status;
+            return res.status(status).send(err)
+        }
+        status = response.status;
+        return res.status(status).send(response);
+    });
+});
+router.post('/v1/add/reaction', [authenticator, chatGuard], function (req, res, next) {
+    let data = req.body;
+    data.req = req.data;
+    groupChat.addReactionToChat(data, function (err, response) {
         let status = 0;
         if (err) {
             status = err.status;
@@ -64,7 +50,19 @@ router.post('/v1/add', [authenticator, roleGuard(['ADMIN'])], function (req, res
     });
 });
 
-
+router.post('/v1/remove/reaction', [authenticator, chatGuard], function (req, res, next) {
+    let data = req.body;
+    data.req = req.data;
+    groupChat.removeReactionFromChat(data, function (err, response) {
+        let status = 0;
+        if (err) {
+            status = err.status;
+            return res.status(status).send(err)
+        }
+        status = response.status;
+        return res.status(status).send(response);
+    });
+});
 
 
 

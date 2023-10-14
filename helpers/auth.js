@@ -104,6 +104,9 @@ const getUserDetails = function (data, response, cb) {
     }
     User.findOne(findData, projection)
         .then(res => {
+            if (!res) {
+                return cb(sendResponse(401, "Auth Fail", "getUserDetails", res, null))
+            }
             console.log(res)
             return cb(null, sendResponse(200, "Success", "getUserDetails", res, null))
         })
