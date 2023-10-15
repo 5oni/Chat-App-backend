@@ -58,10 +58,14 @@ const verifyJWTToken = function (data, response, cb) {
     if (!cb) {
         cb = response
     }
-    console.log(data)
+    console.log('verifyJWTToken', data, response)
     try {
         let decryptedData = jwt.verify(data.token, process.env.PASS_SALT_STATIC, signOptions);
         console.log("decryptedData", decryptedData)
+        let matchKeys = ['name', 'userName', 'email', 'role']
+        if (!matchKeys.every(key => decryptedData[key] == response.data?.[key])) {
+            throw { message: "Invalid Token" }
+        }
         return cb(null, decryptedData);
     } catch (error) {
         console.log("verifyJWTToken Error : ", error)
@@ -101,6 +105,8 @@ const getUserDetails = function (data, response, cb) {
         name: 1,
         email: 1,
         userName: 1,
+        role: 1,
+        password: 1
     }
     User.findOne(findData, projection)
         .then(res => {
