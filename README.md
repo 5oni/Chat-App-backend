@@ -1,5 +1,4 @@
-# Chat-App
-
+# Chat-App-backend
 Backend repo of Chat App for Group chats
 
 ## Table of Contents
@@ -41,4 +40,7 @@ npm start
 
 # Access the project in your browser
 http://localhost:8100/
+
+#Run Tests
+npm run tests
 ```
