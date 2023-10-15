@@ -40,4 +40,7 @@ npm start
 
 # Access the project in your browser
 http://localhost:8100/
+
+#Run Tests
+npm run tests
 ```
