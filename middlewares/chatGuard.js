@@ -3,7 +3,7 @@
 const { validateToken } = require("../helpers/auth");
 const { getGroupDetails } = require("../controllers/group");
 
-module.exports = function () {
+module.exports = function (roles) {
     return function (req, res, next) {
         try {
             let groupId
@@ -20,6 +20,7 @@ module.exports = function () {
                 groupId,
                 req: req.data
             }
+            let userId = req.data.auth.id
             getGroupDetails(payload, (err, response) => {
                 if (err) {
                     console.log('Error in validateToken : ', err);
@@ -29,7 +30,11 @@ module.exports = function () {
                 if (!response.data) {
                     return res.status(403).send({ success: false, message: 'Not Authorized' });
                 }
-                req.data.groupDetails = response.data;
+                let groupData = response.data
+                if (roles?.length && !groupData.admins.includes(userId)) {
+                    return res.status(401).send({ success: false, message: 'Only Admin Can Perform This Action' });
+                }
+                req.data.groupDetails = groupData;
                 next();
             })
         } catch (error) {

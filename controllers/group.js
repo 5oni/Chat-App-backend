@@ -50,7 +50,7 @@ const getUserGroups = async function (data, response, cb) {
         model: 'user',
         select: 'name email userName'
     }]
-    Group.find(findData, projection, options).populate(populate)
+    Group.find(findData, projection, options).populate(populate).sort({ createdAt: -1 })
         .then(res => {
             console.log(res)
             return cb(null, sendResponse(200, "List Fetched", "getUserGroups", res, null))
@@ -127,6 +127,31 @@ const insertNewGroup = function (data, response, cb) {
             return cb(sendResponse(500, null, "insertNewGroup", null, null));
         })
 }
+
+const deleteGroup = function (data, response, cb) {
+    if (!cb) {
+        cb = response;
+    }
+    if (!data.groupId) {
+        return cb(sendResponse(400, null, 'deleteGroup', null, null));
+    }
+
+    let findData = {
+        _id: data.groupId
+    }
+    let updateData = {
+        $set: { isDelete: true }
+    }
+    Group.updateOne(findData, updateData)
+        .then(res => {
+            return cb(null, sendResponse(200, 'Group Deleted', 'deleteGroup', false, null))
+        })
+        .catch(err => {
+            console.log("ERROR in deleteGroup", err);
+            return cb(sendResponse(500, null, "deleteGroup", null, null));
+        })
+}
+exports.deleteGroup = deleteGroup
 
 const getGroupDetails = async function (data, response, cb) {
     if (!cb) {
