@@ -43,7 +43,7 @@ const getUserDetails = function (data, response, cb) {
                 data.userDetails = res;
                 return cb(null, sendResponse(200, 'Success', 'getUserDetails', res, null))
             }
-            return cb(sendResponse(400, 'Email Not Registered', 'getUserDetails', null, null))
+            return cb(sendResponse(400, 'User Not Registered', 'getUserDetails', null, null))
         })
         .catch(err => {
             console.log("ERROR in getUserDetails", err);
