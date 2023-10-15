@@ -120,7 +120,7 @@ const insertNewGroup = function (data, response, cb) {
     }
     Group.create(insertData)
         .then(res => {
-            return cb(null, sendResponse(200, 'Group Added', 'insertNewGroup', false, null))
+            return cb(null, sendResponse(200, 'Group Added', 'insertNewGroup', res, null))
         })
         .catch(err => {
             console.log("ERROR in insertNewGroup", err);

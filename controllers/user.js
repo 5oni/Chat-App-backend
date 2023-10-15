@@ -175,7 +175,7 @@ const insertNewUser = function (data, response, cb) {
     }
     User.create(insertData)
         .then(res => {
-            return cb(null, sendResponse(200, 'User Added', 'insertNewUser', false, null))
+            return cb(null, sendResponse(200, 'User Added', 'insertNewUser', null, null))
         })
         .catch(err => {
             console.log("ERROR in insertNewUser", err);
